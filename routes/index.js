@@ -2,12 +2,6 @@ var express = require('express');
 var app = express();
 
 var mysql      = require('mysql2');
-// var connection = mysql.createConnection({
-//   host     : 'localhost',
-//   user     : 'root',
-//   password : 'hans3180',
-//   database : 'sacsdb'
-// });
 
 const createConnection = () => {
   return new Promise((resolve, reject) => {
@@ -69,35 +63,27 @@ app.get('/ai', async function(req, res, next) {
   res.render('apinfo',{apinfo:row});
 });
 
-app.get('/apa', function(req, res, next) {   /* register ap */
-try {
-  const sql = `INSERT INTO sacsdb.ap values = ${req.body.userId};`
-  const client = await createConnection()
-  await client.promise().query(sql);
-  res.send(200);
-} catch(e) {
-  console.log(e);
-  res.send(500);
-}
+app.get('/apa', function(req, res, next) {
+  res.render('apadd');
 });
 
-// app.get('/su', function(req, res, next) {
-//   res.render('signup');
-// });
+app.get('/su', function(req, res, next) {
+  res.render('signup');
+});
 
 app.get('/apei', function(req, res, next) {
   res.render('apei');
 });
 
-// app.get('/view', function(req, res, next) {
-//   res.render('table');
-// });
+app.get('/view', function(req, res, next) {
+  res.render('table');
+});
 
 app.get('/edit', function(req, res, next) {
   res.render('useredit');
 });
 
-app.get('/info',async function(req, res, next) {  /* AP List view */
+app.get('/info',async function(req, res, next) {
   try {
     const sql = `SELECT * FROM sacsdb.user where userID = ${req.query.userId};`
     const client = await createConnection()
@@ -111,7 +97,7 @@ app.get('/info',async function(req, res, next) {  /* AP List view */
   }
 });
 
-app.post('/delete',async function(req, res, next) {  /* Delete user */
+app.post('/delete',async function(req, res, next) {
   try {
     const sql = `DELETE FROM sacsdb.user where userID = ${req.body.userId};`
     const client = await createConnection()

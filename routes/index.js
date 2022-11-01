@@ -1,7 +1,10 @@
 var express = require('express');
+var SHA1 = require("crypto-js/sha1");
+var axios = require('axios');
+var CryptoJS = require("crypto-js");
 var app = express();
 
-var mysql      = require('mysql2');
+var mysql = require('mysql2');
 
 const createConnection = () => {
   return new Promise((resolve, reject) => {
@@ -19,7 +22,9 @@ const createConnection = () => {
   })
 }
  
-
+const encryptSHA1 = (text) => {
+  return SHA1(text).toString(CryptoJS.enc.Hex);
+}
 
 /* GET home page. */
 app.get('/', function(req, res, next) {
@@ -31,16 +36,46 @@ app.get('/login', function(req, res, next) {
   res.render('login');
 });
 
-app.get('/add', function(req, res, next) {
-  res.render('form');
-});
+// app.get('/add', function(req, res, next) {
+//   res.render('form');
+// });
 
 app.get('/us', function(req, res, next) {
   res.render('userstat');
 });
 
-app.get('/ul', async function(req, res, next) {
-  // sql문 이용하여 데이터 받아와
+app.get('/ue', async function(req, res, next) {   /* 사용자 수정 기능 입력 페이지  */
+var userID = req.query.userID;
+
+const sql = 'SELECT * FROM sacsdb.user where userID = ' + userID
+  const client = await createConnection()
+  const [row] = await client.promise().query(sql);
+
+
+  res.render('useredit',{user:row[0]});
+});
+
+app.post('/ue',async function(req, res, next) {  /* 사용자 Update기능 */
+  const userId = req.body.userID;
+  const userName = req.body.userName;
+  const dept = req.body.dept;
+  const phoneNum = req.body.phoneNum;
+  const crypto =  encryptSHA1(req.body.phoneNum);
+  try {
+    const sql = `update sacsdb.user set userName = "${userName}", dept = "${dept}", crypto="${crypto}", phoneNum = "${phoneNum}" where userID = ${userId};`
+    const client = await createConnection()
+    await client.promise().query(sql);
+
+    res.send(200);
+  } catch(e) {
+    console.log(e);
+
+    res.send(500);
+  }
+});
+
+app.get('/ul', async function(req, res, next) {  /*  사용자 리스트 */
+
   const sql = `SELECT * FROM sacsdb.user;`
   const client = await createConnection()
   const [row] = await client.promise().query(sql);
@@ -49,12 +84,33 @@ app.get('/ul', async function(req, res, next) {
   res.render('userlist',{userList:row});
 });
 
-app.get('/ua', function(req, res, next) {
+app.get('/ua', async function(req, res, next) {  /*  사용자 추가 */
+
   res.render('useradd');
 });
 
-app.get('/apl', async function(req, res, next) {
-   // sql문 이용하여 데이터 받아와
+app.post('/ua', async function(req, res, next) {
+  var userID = req.body.userID;
+  var userName = req.body.userName;
+  var phoneNum = req.body.phoneNum;
+  var crypto =  encryptSHA1(req.body.phoneNum);
+  var dept = req.body.dept;
+  
+
+  // console.log(req.body.phoneNum);
+  // console.log(encryptSHA256(req.body.phoneNum));
+
+  // crypto = encryptSHA256(req.body.phoneNum);
+  const sql= 'INSERT INTO sacsdb.user(userID,userName,phoneNum,crypto,dept) VALUES (?,?,?,?,?);'
+  const client = await createConnection();
+  const [row] = await client.promise().query(sql, [userID,userName,phoneNum,crypto,dept]);
+  res.send(200); 
+
+});
+
+app.get('/apl', async function(req, res, next) {  /*  AP 리스트 */
+
+
    try {
   const sql = `SELECT * FROM sacsdb.ap;`
   const client = await createConnection()
@@ -66,62 +122,37 @@ app.get('/apl', async function(req, res, next) {
 });
 
 
-app.get('/apa', function(req, res, next) {
+app.get('/apa', function(req, res, next) {  /*  AP 추가페이지 */
+
   res.render('apadd');
 });
 
-app.post('/apa',async function(req,res, next){
+app.post('/apa',async function(req,res, next){ /*  AP 추가 기능 */
+  var apnum = req.body.apnum;
   var mac = req.body.mac;
   var ip = req.body.ip;
   var fwv = req.body.fwv;
   var idate = req.body.idate;
   var location = req.body.location;
-  var admin = req.body.admin;
+  var admn = req.body.admn;
 
-  const sql= 'INSERT INTO sacsdb.ap(mac,ip,fwv,idate,location,admin) VALUES("?","?","?","?","?","?");'
+  // console.log(req.body.mac);
+  // console.log(encryptSHA256(req.body.mac));
+
+  const sql= 'INSERT INTO sacsdb.ap(apnum,mac,ip,fwv,idate,location,admn) VALUES (?,?,?,?,?,?,?);'
   const client = await createConnection();
-  const [row] = await client.promise().query(sql);
-  client.query(sql,[$req.query.mac,$req.query.ip,fwv,idate,location,admin],function(err,row,fields){
-    // client.query(sql,function(err,row,fields){
-    if(err){
-      console.log(err);
-    } else{
-      res.render('apinfo',{apinfo:row});
-    }
-  });
+  const [row] = await client.promise().query(sql, [apnum,mac,ip,fwv,idate,location,admn]);
+  res.send(200);
   });
 
-app.get('/su', function(req, res, next) {
-  res.render('signup');
-}); 
+
 
 app.get('/apei', function(req, res, next) {
   res.render('apei');
 });
 
-app.get('/view', function(req, res, next) {
-  res.render('table');
-});
 
-app.get('/edit', function(req, res, next) {
-  res.render('useredit');
-});
-
-// app.get('/info',async function(req, res, next) {
-//   try {
-//     const sql = `SELECT * FROM sacsdb.user where userID = ${req.query.userId};`
-//     const client = await createConnection()
-//     const [row] = await client.promise().query(sql);
-
-//     res.send({userInfo: row[0]});
-//   } catch(e) {
-//     console.log(e);
-
-//     res.send(500);
-//   }
-// });
-
-app.post('/delete',async function(req, res, next) {
+app.post('/delete',async function(req, res, next) {  /* 사용자 삭제 기능 */
   try {
     const sql = `DELETE FROM sacsdb.user where userID = ${req.body.userId};`
     const client = await createConnection()
@@ -135,7 +166,7 @@ app.post('/delete',async function(req, res, next) {
   }
 });
 
-app.post('/deleteap',async function(req, res, next) {
+app.post('/deleteap',async function(req, res, next) {  /* AP 삭제 기능 */
   try {
     const sql = `DELETE FROM sacsdb.ap where apnum = ${req.body.apnum};`
     const client = await createConnection()

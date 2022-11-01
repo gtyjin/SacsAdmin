@@ -30,12 +30,28 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <script src="js/jquery-1.11.1.min.js"></script>
 <script src="js/modernizr.custom.js"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 <!-- Metis Menu -->
 <script src="js/metisMenu.min.js"></script>
 <script src="js/custom.js"></script>
 <link href="css/custom.css" rel="stylesheet">
 <!--//Metis Menu -->
+
+<script>
+	async function post_update(e) {
+	  var isUpdate = confirm("변경 하시겠습니까?");
+	  if(isUpdate) {
+		  console.dir(e.id);
+		  
+		  const response = await axios.post("http://localhost:3000/ue", {userId: e.id});
+
+		  location.reload();
+	  }
+	}
+</script>
+
+
 
 <script>
 	  async function post_delete(e) {
@@ -47,6 +63,10 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 
 			location.reload();
 		}
+	  }
+
+	  function editUser(userID) {
+		location.href = "/ue?userID=" + userID;
 	  }
 </script>
 
@@ -82,6 +102,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 								  <th>사번</th>
 								  <th>이름</th>
 								  <th>폰번호</th>
+								  <th>SHA-1 암호화</th>
 								  <th>부서</th>
 								</tr>
 							</thead>
@@ -92,12 +113,14 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 								  <td><%= userList[i].userID %></td>
 								  <td><%= userList[i].userName %></td>
 								  <td><%= userList[i].phoneNum %></td>
+								  <td><%= userList[i].crypto %></td>
 								  <td><%= userList[i].dept %></td>
-								  <td><a href='/edit'>EDIT</a> | <span style="color:red" id="<%= userList[i].userID %>" onclick="post_delete(this)"> DELETE</span></td>
+								  <td style="color:blue" onclick="editUser('<%= userList[i].userID %>')">EDIT |
+									<span style="color:red" id="<%= userList[i].userID %>" onclick="post_delete(this)"> DELETE</span></td>
 								</tr>
 								<% }  %>
 							</tbody>
-						</table>
+						</table>|
 					</div>
 				</div>
 			</div>

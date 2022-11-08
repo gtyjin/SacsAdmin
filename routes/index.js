@@ -36,9 +36,7 @@ app.get('/login', function(req, res, next) {
   res.render('login');
 });
 
-// app.get('/add', function(req, res, next) {
-//   res.render('form');
-// });
+
 
 app.get('/us', function(req, res, next) {
   res.render('userstat');
@@ -53,6 +51,38 @@ const sql = 'SELECT * FROM sacsdb.user where userID = ' + userID
 
 
   res.render('useredit',{user:row[0]});
+});
+
+app.get('/ape', async function(req, res, next) {   /* AP 수정 기능 입력 페이지  */
+var apnu = req.query.apnum;
+
+  const sql = 'SELECT * FROM sacsdb.ap where apnum = ' + apnu
+  const client = await createConnection()
+  const [row] = await client.promise().query(sql);
+
+
+  res.render('apedit',{ap:row[0]});
+});
+
+app.post('/ape',async function(req, res, next) {  /* ap Update기능 */
+  const apnu = req.body.apnum;
+  const mac = req.body.mac;
+  const ip = req.body.ip;
+  const fwv = req.body.fwv;
+  const idate = req.body.idate;
+  const location = req.body.location;
+  const admn =  req.body.admn;
+  try {
+    const sql = `update sacsdb.ap set mac="${mac}", ip="${ip}", fwv="${fwv}", idate="${idate}", admn="${admn}", location="${location}"  where apnum = ${apnu};`
+    const client = await createConnection()
+    await client.promise().query(sql);
+
+    res.send(200);
+  } catch(e) {
+    console.log(e);
+
+    res.send(500);
+  }
 });
 
 app.post('/ue',async function(req, res, next) {  /* 사용자 Update기능 */
@@ -109,8 +139,6 @@ app.post('/ua', async function(req, res, next) {
 });
 
 app.get('/apl', async function(req, res, next) {  /*  AP 리스트 */
-
-
    try {
   const sql = `SELECT * FROM sacsdb.ap;`
   const client = await createConnection()

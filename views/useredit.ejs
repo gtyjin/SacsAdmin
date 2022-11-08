@@ -8,7 +8,7 @@
 	<head>
 	<title>SACS Administrator Page</title>
 	
-	<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+	<!-- <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script> -->
 
 	<!-- Bootstrap Core CSS -->
 	<link href="css/bootstrap.css" rel='stylesheet' type='text/css' />
@@ -38,9 +38,10 @@
 	<script src="js/metisMenu.min.js"></script>
 	<script src="js/custom.js"></script>
 	<link href="css/custom.css" rel="stylesheet">
+	<!--//Metis Menu -->
 
 	<script>
-		async function post_update() {
+		async function post_updateUser() {
 		var isUpdate = confirm("수정하시겠습니까?");
 		if(isUpdate) {
 			const userID = document.getElementById("userID").value;
@@ -54,7 +55,7 @@
 		}
 	  }
 	</script>
-	<!--//Metis Menu -->
+	
 
 	</head> 
 	<body class="cbp-spmenu-push">
@@ -97,7 +98,7 @@
 
 						<div class="form-group">
 							</div> 
-							<button type="button" onclick="post_update()" class="btn btn-default">등록</button> 
+							<button type="button" onclick="post_updateUser()" class="btn btn-default">등록</button> 
 							
 						</form> 
 							</div>

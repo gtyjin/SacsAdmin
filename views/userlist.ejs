@@ -39,7 +39,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <!--//Metis Menu -->
 
 <script>
-	async function post_update(e) {
+	async function post_updateUser(e) {
 	  var isUpdate = confirm("변경 하시겠습니까?");
 	  if(isUpdate) {
 		  console.dir(e.id);
@@ -64,8 +64,10 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 			location.reload();
 		}
 	  }
+</script>
 
-	  function editUser(userID) {
+<script>
+	  async function editUser(userID) {
 		location.href = "/ue?userID=" + userID;
 	  }
 </script>
@@ -81,14 +83,6 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 		<%- include('headermenu'); -%>
 		<!-- header-starts -->
 
-		<!-- 서버에서 보내준 데이터 받기 -->
-		<!-- <%= userList %> -->
-		<!-- <% console.log(userList[0].userID) %> -->
-		
-		<!-- <% console.log(userList) %> -->
-		
-		<!-- //header-ends -->
-		<!-- main content start-->
 		<div id="page-wrapper">
 			<div class="main-page">
 				<div class="tables">
@@ -116,7 +110,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 								  <td><%= userList[i].crypto %></td>
 								  <td><%= userList[i].dept %></td>
 								  <td style="color:blue" onclick="editUser('<%= userList[i].userID %>')">EDIT |
-									<span style="color:red" id="<%= userList[i].userID %>" onclick="post_delete(this)"> DELETE</span></td>
+								  <span style="color:red" id="<%= userList[i].userID %>" onclick="post_delete(this)"> DELETE</span></td>
 								</tr>
 								<% }  %>
 							</tbody>

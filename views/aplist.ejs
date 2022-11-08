@@ -45,10 +45,30 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 		  
 		  const response = await axios.post("http://localhost:3000/deleteap", {apnum: e.id});
 
+		  location.reload(); 
+	  }
+	}
+</script>
+
+<script>
+	async function post_updateAP(e) {
+	  var isUpdate = confirm("변경 하시겠습니까?");
+	  if(isUpdate) {
+		  console.dir(e.id);
+		  
+		  const response = await axios.post("http://localhost:3000/ape", {apnum: e.id});
+
 		  location.reload();
 	  }
 	}
 </script>
+
+<script>
+	async function editAP(apnum) { 
+	  location.href = "/ape?apnum=" + apnum;
+	}
+</script>
+
 
 </head> 
 <body class="cbp-spmenu-push">
@@ -94,7 +114,8 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 										 <td><%= aplist[i].idate %></td>
 										 <td><%= aplist[i].location %></td>
 										 <td><%= aplist[i].admn %></td>
-										 <td><span style="color:red" id="<%= aplist[i].apnum %>" onclick="post_deleteap(this)"> DELETE</span></td>
+										 <td style="color:blue" onclick="editAP('<%= aplist[i].apnum %>')">EDIT |
+										 <span style="color:red" id="<%= aplist[i].apnum %>" onclick="post_deleteap(this)"> DELETE</span> </td>
 										</tr> 
 									   <% }  %>
 								</tr>
@@ -116,6 +137,8 @@ License URL: http://creativecommons.org/licenses/by/3.0/
       $('.sidebar-menu').SidebarNav()
     </script>
 	<!-- //side nav js -->
+
+
 	
 	<!-- Classie --><!-- for toggle left push menu script -->
 		<script src="js/classie.js"></script>

@@ -1,16 +1,13 @@
-	<!--
-	Author: TJ
-	License: HansCreative
-	License URL: http://creativecommons.org/licenses/by/3.0/
-	-->
+	<!--Author: TJ
+License: HansCreative
+License URL: http://creativecommons.org/licenses/by/3.0/-->
+
+
 	<!DOCTYPE HTML>
 	<html>
 	<head>
 	<title>SACS Administrator Page</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta name="keywords" content="Glance Design Dashboard Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template, 
-	SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design" />
+	
 	<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
 
 	<!-- Bootstrap Core CSS -->
@@ -31,15 +28,35 @@
 	<script src="js/jquery-1.11.1.min.js"></script>
 	<script src="js/modernizr.custom.js"></script>
 
-	<!--webfonts-->
-	<link href="//fonts.googleapis.com/css?family=PT+Sans:400,400i,700,700i&amp;subset=cyrillic,cyrillic-ext,latin-ext" rel="stylesheet">
-	<!--//webfonts--> 
+	
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 	<!-- Metis Menu -->
 	<script src="js/metisMenu.min.js"></script>
 	<script src="js/custom.js"></script>
 	<link href="css/custom.css" rel="stylesheet">
 	<!--//Metis Menu -->
+
+
+	<script>
+		async function post_apedit() {
+		var isUpdate = confirm("수정하시겠습니까?");
+		if(isUpdate) {
+			const apnum = document.getElementById("apnum").value;
+			const mac = document.getElementById("mac").value;
+			const ip = document.getElementById("ip").value;
+			const fwv = document.getElementById("fwv").value;
+			const idate = document.getElementById("idate").value;
+			const location = document.getElementById("location").value;
+			const admn = document.getElementById("admn").value;
+
+			const response = await axios.post("http://localhost:3000/ape", {apnum, mac, ip, fwv, idate, location,admn});
+
+			window.location.href = "http://localhost:3000/apl";
+		}  }
+	</script>
+
+
 
 	</head> 
 	<body class="cbp-spmenu-push">
@@ -57,25 +74,43 @@
 			<div id="page-wrapper">
 				<div class="main-page">
 					<div class="forms">
-						<h2 class="title1">Forms</h2>
+						<h2 class="title1">AP -> 수정</h2>
 						<div class="form-grids row widget-shadow" data-example-id="basic-forms"> 
 							<div class="form-title">
-								<h4>Product Form :</h4>
+								<h4>AP 수정</h4>
 							</div>
 							<div class="form-body">
-						<form> <div class="form-group"> <label for="exampleInputEmail1">Name</label> 
-								<input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter Name"> 
+							<div class="form-group"> <label for="apnum">AP Number</label> 
+								<input type="text" disabled class="form-control" id="apnum" placeholder="AP 시리얼번호"> 
+							</div> 
+							<div class="form-group"> <label for="mac">AP MAC Address</label> 
+								<input type="text" class="form-control" id="mac" placeholder="Enter MAC"> 
 							</div> 
 							<div class="form-group"> 
-								<label for="exampleInputPassword1">Price</label> 
-								<input type="password" class="form-control" id="exampleInputPassword1" placeholder="Enter Price"> 
+								<label for="ip">AP IP Address</label> 
+								<input type="text" class="form-control" id="ip" placeholder="Enter IP"> 
 							</div> 
-							<div class="form-group">
+							<div class="form-group"> 
+								<label for="fwv">Firmware Verion</label> 
+								<input type="text" class="form-control" id="fwv" placeholder="Enter Version"> 
+							</div>
+							<div class="form-group"> 
+								<label for="idate">설치일</label> 
+								<input type="text" class="form-control" id="idate" placeholder="Enter date"> 
 							</div> 
-							<button type="submit" class="btn btn-default">Submit</button> 
-							<button type="submit" class="btn btn-primary">View</button>
-							<button type="submit" class="btn btn-danger">Reset</button>
-						</form> 
+							<div class="form-group"> 
+								<label for="location">설치장소</label> 
+								<input type="text" class="form-control" id="location" placeholder="Enter 설치장소"> 
+							</div> 
+                            <div class="form-group"> 
+								<label for="admn">담당자</label> 
+								<input type="text" class="form-control" id="admn" placeholder="Enter 이름"> 
+							</div> 
+
+						<div class="form-group">
+							</div> 
+							<button type="button" onclick="post_apedit()" class="btn btn-default">수정</button> 
+							
 							</div>
 						</div>
 					</div>
@@ -92,6 +127,17 @@
 		$('.sidebar-menu').SidebarNav()
 		</script>
 		<!-- //side nav js -->
+
+		<script>
+			console.log("<%= ap %>")
+			document.getElementById("apnum").value = "<%= ap.apnum %>"
+			document.getElementById("mac").value = "<%= ap.mac %>"
+			document.getElementById("ip").value = "<%= ap.ip %>"
+			document.getElementById("fwv").value = "<%= ap.fwv %>"
+			document.getElementById("idate").value = "<%= ap.idate %>"
+			document.getElementById("location").value = "<%= ap.location %>"
+			document.getElementById("admn").value = "<%= ap.admn %>"
+		</script>
 		
 		<!-- Classie --><!-- for toggle left push menu script -->
 			<script src="js/classie.js"></script>

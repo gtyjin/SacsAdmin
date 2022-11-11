@@ -1,3 +1,8 @@
+// <!--Author: TJ
+// License: HansCreative corperation
+// License URL: http://creativecommons.org/licenses/by/3.0/-->
+
+
 var express = require('express');
 var SHA1 = require("crypto-js/sha1");
 var axios = require('axios');
@@ -77,7 +82,9 @@ app.post('/ape',async function(req, res, next) {  /* ap Update기능 */
     const client = await createConnection()
     await client.promise().query(sql);
 
-    res.send(200);
+    res.send
+    
+    (200);
   } catch(e) {
     console.log(e);
 

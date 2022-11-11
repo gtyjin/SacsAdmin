@@ -1,3 +1,7 @@
+// <!--Author: TJ
+// License: HansCreative corperation
+// License URL: http://creativecommons.org/licenses/by/3.0/-->
+
 var express = require('express');
 var router = express.Router();
 

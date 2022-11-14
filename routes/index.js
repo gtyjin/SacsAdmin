@@ -166,7 +166,7 @@ app.post('/apa',async function(req,res, next){ /*  AP 추가 기능 */
   var apnum = req.body.apnum;
   var mac = req.body.mac;
   var ip = req.body.ip;
-  var fwv = req.body.fwv;
+  var swv = req.body.swv;
   var idate = req.body.idate;
   var location = req.body.location;
   var admn = req.body.admn;
@@ -174,9 +174,9 @@ app.post('/apa',async function(req,res, next){ /*  AP 추가 기능 */
   // console.log(req.body.mac);
   // console.log(encryptSHA256(req.body.mac));
 
-  const sql= 'INSERT INTO sacsdb.ap(apnum,mac,ip,fwv,idate,location,admn) VALUES (?,?,?,?,?,?,?);'
+  const sql= 'INSERT INTO sacsdb.ap(apnum,mac,ip,swv,idate,location,admn) VALUES (?,?,?,?,?,?,?);'
   const client = await createConnection();
-  const [row] = await client.promise().query(sql, [apnum,mac,ip,fwv,idate,location,admn]);
+  const [row] = await client.promise().query(sql, [apnum,mac,ip,swv,idate,location,admn]);
   res.send(200);
   });
 

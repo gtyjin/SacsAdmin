@@ -42,12 +42,12 @@ License URL: http://creativecommons.org/licenses/by/3.0/-->
 			const apnum = document.getElementById("apnum").value;
 			const mac = document.getElementById("mac").value;
 			const ip = document.getElementById("ip").value;
-			const fwv = document.getElementById("fwv").value;
+			const swv = document.getElementById("swv").value;
 			const idate = document.getElementById("idate").value;
 			const location = document.getElementById("location").value;
 			const admn = document.getElementById("admn").value;
 
-			const response = await axios.post("http://localhost:3000/apa", {apnum,mac, ip, fwv, idate, location, admn});
+			const response = await axios.post("http://localhost:3000/apa", {apnum,mac, ip, swv, idate, location, admn});
 			console.log("success")
 			window.location.href = "http://localhost:3000/apl";
 		}
@@ -86,8 +86,8 @@ License URL: http://creativecommons.org/licenses/by/3.0/-->
 								<input type="text" class="form-control" id="ip" placeholder="Enter IP"> 
 							</div> 
 							<div class="form-group"> 
-								<label for="fwv">Firmware Verion</label> 
-								<input type="text" class="form-control" id="fwv" placeholder="Enter Version"> 
+								<label for="swv">Software Verion</label> 
+								<input type="text" class="form-control" id="swv" placeholder="Enter Version"> 
 							</div>
 							<div class="form-group"> 
 								<label for="idate">설치일</label> 

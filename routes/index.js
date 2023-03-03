@@ -27,6 +27,8 @@ const createConnection = () => {
   })
 }
  
+const secret = 'sacs';
+
 const encryptSHA1 = (text) => {
   return SHA1(text).toString(CryptoJS.enc.Hex);
 }
